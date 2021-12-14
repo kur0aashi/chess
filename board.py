@@ -1,4 +1,5 @@
 #now class for the board
+#see git changes
 class Board:
     def __init__(self):
         self.rooms=list()
