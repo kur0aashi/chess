@@ -161,7 +161,22 @@ def pieceSelection():
                 selected=True
     except:
         print("clicked outside")
-
+def gameover(k):
+    global mainWindow
+    if k[0]=='w':
+        mesg="Black side has won"
+    else:
+        mesg="White side has won"
+    font = pygame.font.Font('fonts/pt.otf',80) 
+    #(0, 0, 0) is black, to make black text
+    text = font.render(mesg, True, (255,255,255))
+    mainWindow.fill((0,0,0))
+    mainWindow.blit(text,(280,300))
+    pygame.display.update()
+    time.sleep(3)
+    pygame.quit()
+    sys.exit()
+    
 
 #********main loop starts here***********
 while True:
@@ -179,11 +194,14 @@ while True:
                 mouse_pos=pygame.mouse.get_pos()
                 clicked_cell=get_clicked_cell(mouse_pos)
                 pos=chess.nametoc(clicked_cell)
-                print(clicked_cell+" clicked now moving "+selected_piece[1])
+               
                 
                 if chess.canMoveHere(pos[0],pos[1],selected_piece[1]):
                     if chess.findPiece(pos[0],pos[1])!="empty":
                         piece_at_pos=chess.findPiece(pos[0],pos[1])
+                        print(piece_at_pos[1:6])
+                        if piece_at_pos[1:5]=="king":
+                            gameover(piece_at_pos)
                         deathpic=pygame.transform.smoothscale(images[piece_at_pos],(30,40))
                         if piece_at_pos[0]=='w':
                             death_list[0].append(deathpic)
@@ -209,8 +227,6 @@ while True:
                     else:
                         turn="black"
                     chess.updateMovesList()
-                    print(death_list)
-                    print("The new location of "+selected_piece[1]+" : "+clicked_cell)
                     selected=False
                     selected_piece="none"
                     selectionrecord="none"
